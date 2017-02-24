@@ -1,0 +1,5 @@
+http://www.google.es
+http://www.php.net/index.html
+http://www.w3schools.com/php/php_intro.asp
+http://deic.uab.es/images/deic-ct.png
+http://deic.uab.es/index.html
