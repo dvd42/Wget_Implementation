@@ -1,4 +1,0 @@
-sun.net.www.protocol.http.HttpURLConnection$HttpInputStream@3e3abc88
-sun.net.www.protocol.http.HttpURLConnection$HttpInputStream@6ce253f1
-sun.net.www.protocol.http.HttpURLConnection$HttpInputStream@53d8d10a
-sun.net.www.protocol.http.HttpURLConnection$HttpInputStream@e9e54c2

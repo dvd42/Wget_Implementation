@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -25,25 +25,16 @@ public class Wget {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));
 			String line = br.readLine();
-		
-			//Create File output Stream to write the URL data to Web_data.txt
-			File file = new File("Web_data.txt");
-			
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			
-			FileOutputStream fop = new FileOutputStream(file);
+			int i = 0;
 			
 			//Read the whole file
 			while(line != null){
-				saveURL(line, fop);
+				saveURL(line, i);
 				line = br.readLine();
+				i++;
 			}
 			br.close();
-			fop.flush();
-			fop.close();
-		
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -52,24 +43,33 @@ public class Wget {
 	}
 
 	
-	public static void saveURL(String line, FileOutputStream fop){
+	public static void saveURL(String line, int i){
 		
 		try {
 			
-			InputStream is = null;
-			URL url = new URL(line);
-		
-			//open connection to URL to get data
-			is = url.openStream();
-
-			// get the content in bytes
-			byte[] contentInBytes = is.toString().getBytes();
-			
-			System.out.println(is.toString());
-			
-			fop.write(contentInBytes);
-			fop.write("\n".getBytes());
-			
+		 	URL u = new URL(line);
+            BufferedReader bf = new BufferedReader(new InputStreamReader(u.openStream()));
+            
+            File f = new File("Web_data" + i);
+            if (!f.exists()){
+            	f.createNewFile();	
+            }
+            
+            FileOutputStream fop = new FileOutputStream(f);
+            
+            
+            //Write the content of the web to the file 
+            while((line = bf.readLine()) != null){
+            	
+                byte[] contentInBytes = bf.readLine().getBytes();
+				fop.write(contentInBytes);
+            }
+            
+            bf.close();
+            fop.flush(); //force out all the data from the stream
+            fop.close();
+	        	
+	            
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
