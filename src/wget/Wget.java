@@ -4,10 +4,10 @@ package wget;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -16,17 +16,19 @@ public class Wget {
 
 	public static void main(String[] args) {
 		
-		readFile(args[1]);
+		Wget wg = new Wget();
+		
+		//args[1] contains the path of the file containing the names of the URLs
+		wg.readFile(args[1]);
 		
 	}
-
-	public static void readFile(String path) {
+	
+	public  void readFile(String path) {
 		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));
 			String line = br.readLine();
-			int i = 0;
-			
+		
 			//Read the whole file
 			while(line != null){
 				saveURL(line, i);
@@ -42,33 +44,44 @@ public class Wget {
 		}
 	}
 
-	
-	public static void saveURL(String line, int i){
+	//Save URL to a file 
+	public void saveURL(String line, int i){
 		
 		try {
 			
 		 	URL u = new URL(line);
-            BufferedReader bf = new BufferedReader(new InputStreamReader(u.openStream()));
-            
-            File f = new File("Web_data" + i);
-            if (!f.exists()){
-            	f.createNewFile();	
-            }
+            InputStream is = u.openStream();
            
-            FileWriter fop = new FileWriter(f);
-            String s = bf.readLine();
+            //Split the URL name 
+            String[] web = u.getPath().split("/");
             
-            //Write the content of the web to the file 
-            while(s != null){
+            /*
+             * Save the file we fetch from the web with its original name 
+             * If we look for a domain instead of a specific file the 
+             * file name will be "index.html" by default)
+             */
+            File f;
+			if (web[web.length - 1].isEmpty()) {
+				f = new File("index" + ".html" + i);
+			}
+			else{
+				f = new File(web[web.length - 1] + i);
+			}
+	       
+	        FileOutputStream fos = new FileOutputStream(f);
+        
+            
+	        //Write every byte in the web to the file 
+            int b = is.read();
+            while (b != -1) {
             	
-                fop.write(s);
-                s = bf.readLine(); 
+            	fos.write(b);
+            	b = is.read();
             }
             
-            bf.close();
-            fop.close();
-	        	
-	            
+            is.close();
+            fos.close();
+           
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -78,6 +91,8 @@ public class Wget {
 		
 		
 	}
+	
+	public static int i = 0;
 }
 
 
