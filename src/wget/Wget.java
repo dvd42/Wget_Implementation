@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -50,7 +49,7 @@ public class Wget {
 		try {
 			
 		 	URL u = new URL(line);
-            InputStream is = u.openStream();
+		 	Html2AsciiInputStream is = new Html2AsciiInputStream(u.openStream());
            
             //Split the URL name 
             String[] web = u.getPath().split("/");
@@ -70,16 +69,16 @@ public class Wget {
 	       
 	        FileOutputStream fos = new FileOutputStream(f);
         
-            
 	        //Write every byte in the web to the file 
-            int b = is.read();
-            while (b != -1) {
-            	
-            	fos.write(b);
-            	b = is.read();
-            }
             
-            is.close();
+	        int c = is.read();
+	        
+	        while (c != -1){
+	        	fos.write(c);
+	        	c = is.read();
+	        }
+	        	
+	        is.close();
             fos.close();
            
 		} catch (MalformedURLException e) {
@@ -88,8 +87,6 @@ public class Wget {
 			e.printStackTrace();
 		}
 			
-		
-		
 	}
 	
 	public static int i = 0;
