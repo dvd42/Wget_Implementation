@@ -27,12 +27,7 @@ public class Html2AsciiInputStream extends FilterInputStream {
 					c = in.read();
 				} 
 			} while (c == '<');
-			
-		if (c == '<' || c == '>'){
-			System.out.println(c);
-		}
-		
-			
+					
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

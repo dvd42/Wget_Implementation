@@ -75,7 +75,7 @@ public class Wget {
 	        
 	        while (c != -1){
 	        	fos.write(c);
-	        	c = is.read();
+	        	c = is.read(); 
 	        }
 	        	
 	        is.close();
