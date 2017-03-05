@@ -18,6 +18,7 @@ public class Html2AsciiInputStream extends FilterInputStream {
 			
 			c = in.read();
 			
+			//Loop the web data skipping all the html tags
 			do {
 				if (c == '<') {
 
