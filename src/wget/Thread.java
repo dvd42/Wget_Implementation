@@ -28,7 +28,6 @@ public class Thread extends java.lang.Thread{
            
             //Split the URL name 
             String[] web = u.getPath().split("/");
-            
             String[] nameExtension = web[web.length -1].split("\\.");
             
             /*
@@ -48,9 +47,7 @@ public class Thread extends java.lang.Thread{
 			
 			FileOutputStream fos = new FileOutputStream(f);
 			
-			
 			if(asc){
-				
 				//Apply filter
 				asc(is, fos); 
 			}
@@ -69,7 +66,6 @@ public class Thread extends java.lang.Thread{
 			
 		fos.close();
 		
-           
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

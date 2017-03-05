@@ -1,8 +1,6 @@
 package wget;
 
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,20 +12,17 @@ public class Wget {
 		
 		Wget wg = new Wget();
 		
+		//Check the arguments with which the program was executed
 		wg.readArgs(args);
 		
-		if(fileFilter){
-			
-			File f = new File(args[1]);
-			
-			if(!f.exists()){
-				System.out.println("File doesnt exists");
-				System.exit(1);
+		if(!fileFilter){
+			System.out.println("You must especify the file/URL you want to download");
+			System.exit(1);
+
 			}
-		}
+		
 		wg.readFile(args[1]);
 	}
-	
 	
 	public  void readFile(String path) {
 		
@@ -39,8 +34,10 @@ public class Wget {
 			//Read the whole file
 			while(line != null){
 		
+				//Creat and start a thread for each line in the file 
 				Thread t = new Thread(line);
 				t.start();
+				
 				line = br.readLine();
 				i++;
 			}
