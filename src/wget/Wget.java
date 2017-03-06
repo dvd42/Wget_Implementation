@@ -16,7 +16,7 @@ public class Wget {
 		wg.readArgs(args);
 		
 		if(!fileFilter){
-			System.out.println("You must especify the file/URL you want to download");
+			System.out.println("You must especify the file from which to read URLs");
 			System.exit(1);
 
 			}
@@ -53,11 +53,6 @@ public class Wget {
 	
 	public void readArgs(String[] args){
 
-		if(args.length < 2){
-			System.out.println("You need to indicate a file or URL to download (-f filename )");
-			System.exit(1);
-		}
-		
 		for(int i = 0; i < args.length; i++){
 			
 			if(args[i].equals("-f")) {fileFilter = true;}
