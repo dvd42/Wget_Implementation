@@ -34,10 +34,9 @@ public class Wget {
 			//Read the whole file
 			while(line != null){
 		
-				//Creat and start a thread for each line in the file 
+				//Create and start a thread for each line in the file 
 				Thread t = new Thread(line);
 				t.start();
-				
 				line = br.readLine();
 				i++;
 			}
