@@ -46,7 +46,7 @@ public class Thread extends java.lang.Thread{
 			
 			if(asc){
 				//Apply filter
-				asc(is, fos); 
+				filterAsc(is, fos); 
 			}
 		
 			else{
@@ -72,7 +72,7 @@ public class Thread extends java.lang.Thread{
 	}
 	
 	//If the -a paramater was called then we parse the file to remove all the html tags
-	public void asc(InputStream is, FileOutputStream fos) throws IOException {
+	public void filterAsc(InputStream is, FileOutputStream fos) throws IOException {
 		
 		Html2AsciiInputStream html = new Html2AsciiInputStream(is);
 		int b = html.read();
