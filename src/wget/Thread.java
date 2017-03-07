@@ -26,30 +26,27 @@ public class Thread extends java.lang.Thread{
 		 	URL u = new URL(line);
             InputStream is = u.openStream();
            
-            //Split the URL name 
+            //Split the URL name getting the filename and its extension
             String[] web = u.getPath().split("/");
             String[] nameExtension = web[web.length -1].split("\\.");
             
-            /*
-             * Save the file we fetch from the web with its original name 
-             * If we look for a domain instead of a specific file the 
-             * file name will be "index.html" by default)
-             */
+            //Save the file we fetch from the web with its original name 
             File f;
+            //If we dont look for a specific file the filename will be index.html by default
 			if (web[web.length - 1].isEmpty()) {
 				f = new File("index" + i + ".html");
 			}
 			
 			else{
 			
-				f = new File(nameExtension[0] + i +"." + nameExtension[1]);
+				f = new File(nameExtension[0] + i + "." + nameExtension[1]);
 			}
 			
 			FileOutputStream fos = new FileOutputStream(f);
 			
 			if(asc){
 				//Apply filter
-				asc(is, fos); 
+				filterAsc(is, fos); 
 			}
 		
 			else{
@@ -74,8 +71,8 @@ public class Thread extends java.lang.Thread{
 			
 	}
 	
-	//If the -a paramater was called then we parse the file the remove all the html tags
-	public void asc(InputStream is, FileOutputStream fos) throws IOException {
+	//If the -a paramater was called then we parse the file to remove all the html tags
+	public void filterAsc(InputStream is, FileOutputStream fos) throws IOException {
 		
 		Html2AsciiInputStream html = new Html2AsciiInputStream(is);
 		int b = html.read();
@@ -89,6 +86,6 @@ public class Thread extends java.lang.Thread{
 		html.close();
 	}
 	
-	private  String line;
-	private  int count;	
+	private String line;
+	private int count;	
 }
