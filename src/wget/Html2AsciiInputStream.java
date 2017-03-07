@@ -19,15 +19,14 @@ public class Html2AsciiInputStream extends FilterInputStream {
 			
 			c = in.read();
 			
-			do {
-				if (c == '<') {
-
-					while (c != '>') {
-						c = in.read();
-					}
+			while (c == '<'){				
+	
+				while (c != '>') {
 					c = in.read();
-				} 
-			} while (c == '<');
+				}
+				c = in.read();
+				
+			}
 					
 		} catch (IOException e) {
 			e.printStackTrace();
