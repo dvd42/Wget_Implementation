@@ -4,10 +4,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class Thread extends java.lang.Thread{
+	
+	private String line;
+	private int count;
 	
 	public Thread(String l){
 		this.count = Wget.i;	
@@ -19,49 +26,63 @@ public class Thread extends java.lang.Thread{
 		this.saveURL(line, count, Wget.ascFilter, Wget.zipFilter, Wget.gzipFilter);
 	}
 	
+	//Download the file/URL applying the specified filters
 	public void saveURL(String line, int i, boolean asc, boolean zip, boolean gzip){
 		
 		try {
 			
 		 	URL u = new URL(line);
-            InputStream is = u.openStream();
-           
+            URLConnection url = u.openConnection();
+            InputStream is = url.getInputStream();
+            
             //Split the URL name getting the filename and its extension
             String[] web = u.getPath().split("/");
             String[] nameExtension = web[web.length -1].split("\\.");
             
             //Save the file we fetch from the web with its original name 
             File f;
-            //If we dont look for a specific file the filename will be index.html by default
+            //If we dont fetch for a specific file the filename will be index.html by default
 			if (web[web.length - 1].isEmpty()) {
 				f = new File("index" + i + ".html");
 			}
 			
-			else{
-			
+			else{				
 				f = new File(nameExtension[0] + i + "." + nameExtension[1]);
 			}
 			
-			FileOutputStream fos = new FileOutputStream(f);
+			OutputStream fos = null;
 			
-			if(asc){
-				//Apply filter
-				filterAsc(is, fos); 
-			}
-		
-			else{
-				
-				int b = is.read();
-				
-	            while (b != -1) {	
-	            	fos.write(b);
-	            	b = is.read();
-	            }
-	         
-	            is.close();    
+			int b = is.read();	
+			
+			//Apply ascii filter to every file except images
+			if(asc && !url.getContentType().contains("image")){
+				is = new Html2AsciiInputStream(is);
 			}
 			
-		fos.close();
+			//Apply zip filter
+			// TODO Find cleaner Way to do this?
+			ZipOutputStream zos = null;
+			if(zip){
+				fos = new FileOutputStream(f.getName() + ".zip");
+				ZipEntry entry = new ZipEntry(f.getName());
+				zos = new ZipOutputStream(fos);
+				zos.putNextEntry(entry);
+				fos = zos;
+			}
+			
+			if(!zip){
+				fos = new FileOutputStream(f);
+			}
+			
+            while (b != -1) {	
+            	fos.write(b);
+            	b = is.read();
+            }
+            // TODO Encapsulate this or let exceptions catch??
+	        zos.closeEntry();
+	        zos.close();
+	        is.close();
+			fos.close();
 		
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -70,22 +91,5 @@ public class Thread extends java.lang.Thread{
 		}
 			
 	}
-	
-	//If the -a paramater was called then we parse the file to remove all the html tags
-	public void filterAsc(InputStream is, FileOutputStream fos) throws IOException {
 		
-		Html2AsciiInputStream html = new Html2AsciiInputStream(is);
-		int b = html.read();
-		
-		while (b != -1) {
-			
-			fos.write(b);
-			b = html.read();
-		}
-		
-		html.close();
-	}
-	
-	private String line;
-	private int count;	
 }

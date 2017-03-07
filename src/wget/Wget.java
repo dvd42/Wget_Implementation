@@ -7,22 +7,12 @@ import java.io.IOException;
 
 
 public class Wget {
-
-	public static void main(String[] args) {
-		
-		Wget wg = new Wget();
-		
-		//Check the arguments with which the program was executed
-		wg.readArgs(args);
-		
-		if(!fileFilter){
-			System.out.println("You must especify the file from which to read URLs");
-			System.exit(1);
-
-			}
-		
-		wg.readFile(args[1]);
-	}
+	
+	public static int i = 0;
+	public static boolean fileFilter = false;
+	public static boolean ascFilter = false;
+	public static boolean zipFilter = false;
+	public static boolean gzipFilter = false;
 	
 	public  void readFile(String path) {
 		
@@ -34,14 +24,12 @@ public class Wget {
 			//Read the whole file
 			while(line != null){
 		
-				//Creat and start a thread for each line in the file 
+				//Create and start a thread for each line in the file 
 				Thread t = new Thread(line);
 				t.start();
-				
 				line = br.readLine();
 				i++;
-			}
-			
+			}	
 			br.close();
 			
 		} catch (FileNotFoundException e) {
@@ -51,25 +39,34 @@ public class Wget {
 		}
 	}
 	
+	//Checks the arguments with which the program was executed
 	public void readArgs(String[] args){
 
+		
 		for(int i = 0; i < args.length; i++){
 			
-			if(args[i].equals("-f")) {fileFilter = true;}
-			
+			if(args[i].equals("-f")) {fileFilter = true;} 
+
 			if(args[i].equals("-a")) {ascFilter = true;}
 		
 			if(args[i].equals("-z")) {zipFilter = true;}
 				
 			if(args[i].equals("-gz")) {gzipFilter = true;}
-		}
-			
-	}	
-	public static int i = 0;
-	public static boolean fileFilter = false;
-	public static boolean ascFilter = false;
-	public static boolean zipFilter = false;
-	public static boolean gzipFilter = false;
+		}			
+	}
+	
+	public static void main(String[] args) {
+		
+		Wget wg = new Wget();
+		wg.readArgs(args);
+		
+		if(!fileFilter){
+			System.out.println("You must especify the file from which to read URLs");
+			System.exit(1);
+
+			}
+		wg.readFile(args[1]);
+	}
 }
 
 
