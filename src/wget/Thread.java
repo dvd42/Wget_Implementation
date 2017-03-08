@@ -56,7 +56,7 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 			}
 
 			if (gzip) {
-				fileExtension += ".gzip";
+				fileExtension += ".gz";
 			}
 
 			// Save the file we fetch from the web with its original name plus
