@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class Wget {
+public class Wget implements WgetInterface {
 
 	public static int i = 0;
 	public boolean fileFilter = false;
@@ -13,6 +13,7 @@ public class Wget {
 	public boolean zipFilter = false;
 	public boolean gzipFilter = false;
 
+	@Override
 	public void readFile(String path) {
 
 		try {
@@ -38,7 +39,7 @@ public class Wget {
 		}
 	}
 
-	// Checks the arguments with which the program was executed
+	@Override
 	public void readArgs(String[] args) {
 
 		for (int i = 0; i < args.length; i++) {
