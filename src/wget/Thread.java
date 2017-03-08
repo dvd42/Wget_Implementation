@@ -24,7 +24,7 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 	public void run() {
 		this.saveURL(line, count, Wget.ascFilter, Wget.zipFilter, Wget.gzipFilter);
 	}
-	
+
 	@Override
 	@SuppressWarnings("resource")
 	public void saveURL(String line, int i, boolean asc, boolean zip, boolean gzip) {
@@ -38,72 +38,57 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 			// Split the URL name getting the filename and its extension
 			String[] web = u.getPath().split("/");
 			String[] nameExtension = web[web.length - 1].split("\\.");
-			String filterExtensionZipEntry = "";
-			String filterExtensionFile = "";
+			String fileExtension = "";
 
-			// Create file names
-			if (asc) {
-				if (zip) {
-					filterExtensionZipEntry += ".asc";
-				} else if(url.getContentType().contains("text")){
-					filterExtensionFile += ".asc";
-				}
+			// Add extensions to file names
+			if (asc && url.getContentType().contains("text/html")) {
+				fileExtension += ".asc";
 			}
-			
-			System.out.println(url.getContentType());
-			
 			if (zip) {
-				filterExtensionFile += ".zip";
+				fileExtension += ".zip";
 			}
-			
-			// if(gzip){
-			// filterExtension += ".gz";
-			// }
 
-			String entryName = "";
-
-			// Save the file we fetch from the web with its original name
+			// Save the file we fetch from the web with its original name plus
+			// extension
 			// If we dont fetch for a specific file the filename will be
 			// index.html by default
 			File f;
 			if (web[web.length - 1].isEmpty()) {
-				f = new File("index" +i + ".html" + filterExtensionFile); 
-				entryName = "index" + i + ".html" + filterExtensionZipEntry;
-			} 
-			else {
-				f = new File(nameExtension[0] + i + "." + nameExtension[1] + filterExtensionFile);
-				entryName = nameExtension[0] + i + "." + nameExtension[1] + filterExtensionZipEntry;
+				f = new File("index" + i + ".html" + fileExtension);
+			} else {
+				f = new File(nameExtension[0] + i + "." + nameExtension[1] + fileExtension);
 			}
 
 			OutputStream fos = new FileOutputStream(f);
-			int b = is.read();
 
-			// Apply ascii filter to every file except images
-			if (asc && url.getContentType().contains("text")) {
+			// Apply ascii filter to text file
+			if (asc && url.getContentType().contains("text/html")) {
 				is = new Html2AsciiInputStream(is);
 			}
 
 			// Apply zip filter
 			ZipOutputStream zos = null;
 			if (zip) {
-				ZipEntry entry = new ZipEntry(entryName);
+				ZipEntry entry = new ZipEntry(f.getName().replace(".zip", ""));
 				zos = new ZipOutputStream(fos);
 				zos.putNextEntry(entry);
 				fos = zos;
 			}
 
-			// Copy bytes
+			// TODO gzip
+
+			// Copy bytes to file
+			int b = is.read();
 			while (b != -1) {
 				fos.write(b);
 				b = is.read();
 			}
-			
+
 			// Close zip
 			if (zip) {
 				zos.closeEntry();
 				zos.close();
 			}
-
 			is.close();
 			fos.close();
 

@@ -10,28 +10,25 @@ public class Html2AsciiInputStream extends FilterInputStream {
 		super(in);
 	}
 
-	//Loop the web data skipping all the html tags
-	public int read(){
-		
+	// Loop the web data skipping all the html tags
+	public int read() {
+
 		int c = 0;
-		
+
 		try {
-			
+
 			c = in.read();
-			
-			while (c == '<'){				
-	
+			while (c == '<') {
 				while (c != '>') {
 					c = in.read();
 				}
 				c = in.read();
-				
 			}
-					
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return c;
 	}
 
