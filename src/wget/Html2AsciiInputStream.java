@@ -16,7 +16,6 @@ public class Html2AsciiInputStream extends FilterInputStream {
 		int c = 0;
 
 		try {
-
 			c = in.read();
 			while (c == '<') {
 				while (c != '>') {
