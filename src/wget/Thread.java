@@ -55,9 +55,8 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 				fileExtension += ".zip";
 			}
 
-			//TODO fix formating
 			if (gzip) {
-				fileExtension += ".gzip";
+				fileExtension += ".gz";
 			}
 
 			// Save the file we fetch from the web with its original name plus
@@ -99,6 +98,8 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 				b = is.read();	
 			}
 			
+			
+			((GZIPOutputStream) fos).finish();
 			// Close zip
 			if (zip) {
 				zos.closeEntry();
@@ -106,7 +107,6 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 			}
 			
 			is.close();
-			fos.close();
 			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
