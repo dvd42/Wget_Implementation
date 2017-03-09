@@ -82,8 +82,12 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 			}
 
 			// Apply zip filter
+			ZipEntry entry = null;
 			if (zip) {
-				ZipEntry entry = new ZipEntry(f.getName().replace(".zip.gz", ""));
+				entry = new ZipEntry(f.getName().replace(".zip", ""));
+				if (gzip){
+					entry = new ZipEntry(f.getName().replace(".zip.gz", ""));
+				}
 				ZipOutputStream zos = new ZipOutputStream(fos);
 				zos.putNextEntry(entry);
 				fos = zos;
