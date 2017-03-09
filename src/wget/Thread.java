@@ -12,6 +12,8 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.rmi.CORBA.Util;
+
 public class Thread extends java.lang.Thread implements ThreadInterface {
 
 	private String line;
@@ -98,15 +100,9 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 				b = is.read();
 			}
 
-			// Close zip
-			if (zip) {
-				zos.closeEntry();
-				zos.close();
-			}
-
+			closeQuietly(fos);
 			is.close();
-			fos.close();
-
+			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -114,5 +110,18 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 		}
 
 	}
-
+	
+	public void closeQuietly(OutputStream fos){
+		
+		try {
+			
+			if(fos != null){
+				fos.close();
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
