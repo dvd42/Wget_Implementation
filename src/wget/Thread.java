@@ -12,8 +12,6 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.rmi.CORBA.Util;
-
 public class Thread extends java.lang.Thread implements ThreadInterface {
 
 	private String line;
@@ -79,18 +77,16 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 				is = new Html2AsciiInputStream(is);
 			}
 
-			// Apply zip filter
-			ZipOutputStream zos = null;
-			if (zip) {
-				ZipEntry entry = new ZipEntry(f.getName().replace(".zip", ""));
-				zos = new ZipOutputStream(fos);
-				zos.putNextEntry(entry);
-				fos = zos;
-			}
-
-			// TODO help!!
 			if (gzip) {
 				fos = new GZIPOutputStream(fos);
+			}
+
+			// Apply zip filter
+			if (zip) {
+				ZipEntry entry = new ZipEntry(f.getName().replace(".zip.gz", ""));
+				ZipOutputStream zos = new ZipOutputStream(fos);
+				zos.putNextEntry(entry);
+				fos = zos;
 			}
 
 			// Copy bytes to file
@@ -102,7 +98,7 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 
 			closeQuietly(fos);
 			is.close();
-			
+
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -110,18 +106,18 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 		}
 
 	}
-	
-	public void closeQuietly(OutputStream fos){
-		
+
+	public void closeQuietly(OutputStream fos) {
+
 		try {
-			
-			if(fos != null){
+
+			if (fos != null) {
 				fos.close();
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

@@ -13,8 +13,8 @@ public interface WgetInterface {
 	/**
 	 * Checks the arguments with which the program was executed -f to indicate
 	 * the file to read the list of URLS to download -zip to download the file
-	 * in zip format -a to remove all the html tags and comments -gz to
-	 * download the file in gzip format
+	 * in zip format -a to remove all the html tags and comments -gz to download
+	 * the file in gzip format
 	 * 
 	 * @param args
 	 *            Parameters with which we want the program to be executed
