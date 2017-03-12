@@ -17,13 +17,22 @@ public class Html2AsciiInputStream extends FilterInputStream {
 
 		try {
 			c = in.read();
+
 			while (c == '<') {
 				while (c != '>') {
 					c = in.read();
+
+					//Skip all html comments as well
+					if (c == '!') {
+						c = (int) in.skip(2);
+						while (c != '-') {
+							c = in.read();
+						}
+					}
 				}
 				c = in.read();
 			}
-
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

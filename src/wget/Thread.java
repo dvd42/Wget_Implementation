@@ -70,7 +70,7 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 				f = new File(nameExtension[0] + count + "." + nameExtension[1] + fileExtension);
 			}
 
-			OutputStream fos = new FileOutputStream(f);
+			OutputStream os = new FileOutputStream(f);
 
 			// Apply ascii filter to text file
 			if (asc && url.getContentType().contains("text/html")) {
@@ -78,29 +78,28 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 			}
 
 			if (gzip) {
-				fos = new GZIPOutputStream(fos);
+				os = new GZIPOutputStream(os);
 			}
 
 			// Apply zip filter
-			ZipEntry entry = null;
 			if (zip) {
-				entry = new ZipEntry(f.getName().replace(".zip", ""));
+				ZipEntry entry = new ZipEntry(f.getName().replace(".zip", ""));
 				if (gzip){
 					entry = new ZipEntry(f.getName().replace(".zip.gz", ""));
 				}
-				ZipOutputStream zos = new ZipOutputStream(fos);
+				ZipOutputStream zos = new ZipOutputStream(os);
 				zos.putNextEntry(entry);
-				fos = zos;
+				os = zos;
 			}
 
 			// Copy bytes to file
 			int b = is.read();
 			while (b != -1) {
-				fos.write(b);
+				os.write(b);
 				b = is.read();
 			}
 
-			closeQuietly(fos);
+			closeQuietly(os);
 			is.close();
 
 		} catch (MalformedURLException e) {
@@ -111,12 +110,12 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 
 	}
 
-	public void closeQuietly(OutputStream fos) {
+	public void closeQuietly(OutputStream os) {
 
 		try {
 
-			if (fos != null) {
-				fos.close();
+			if (os != null) {
+				os.close();
 			}
 
 		} catch (IOException e) {
