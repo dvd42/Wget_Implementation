@@ -69,6 +69,18 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 			} else {
 				f = new File(nameExtension[0] + count + "." + nameExtension[1] + fileExtension);
 			}
+			
+			if (f.exists()){
+				count++;
+		
+				if (web[web.length - 1].isEmpty()) {
+					f = new File("index" + count + ".html" + fileExtension);
+				} else {
+					f = new File(nameExtension[0] + count + "." + nameExtension[1] + fileExtension);
+				}
+				
+			}
+			
 
 			OutputStream os = new FileOutputStream(f);
 
