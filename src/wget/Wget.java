@@ -12,7 +12,8 @@ public class Wget implements WgetInterface {
 	public boolean ascFilter = false;
 	public boolean zipFilter = false;
 	public boolean gzipFilter = false;
-
+	
+	
 	@Override
 	public void readFile(String path) {
 
@@ -25,10 +26,9 @@ public class Wget implements WgetInterface {
 			while (line != null) {
 
 				// Create and start a thread for each line in the file
-				Thread t = new Thread(line, i, ascFilter, zipFilter, gzipFilter);
+				Thread t = new Thread(line, ascFilter, zipFilter, gzipFilter);
 				t.start();
 				line = br.readLine();
-				i++;
 			}
 			br.close();
 

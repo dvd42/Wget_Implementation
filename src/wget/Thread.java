@@ -15,13 +15,16 @@ import java.util.zip.ZipOutputStream;
 public class Thread extends java.lang.Thread implements ThreadInterface {
 
 	private String line;
-	private int count;
 	private boolean asc;
 	private boolean zip;
 	private boolean gzip;
 
-	public Thread(String l, int i, boolean asc, boolean zip, boolean gzip) {
-		this.count = Wget.i;
+	
+	public synchronized void increment(){
+		Wget.i++;
+	}
+
+	public Thread(String l, boolean asc, boolean zip, boolean gzip) {
 		this.line = l;
 		this.asc = asc;
 		this.zip = zip;
@@ -65,18 +68,18 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 			// index.html by default
 			File f;
 			if (web[web.length - 1].isEmpty()) {
-				f = new File("index" + count + ".html" + fileExtension);
+				f = new File("index" + Wget.i + ".html" + fileExtension);
 			} else {
-				f = new File(nameExtension[0] + count + "." + nameExtension[1] + fileExtension);
+				f = new File(nameExtension[0] + Wget.i  + "." + nameExtension[1] + fileExtension);
 			}
 			
 			if (f.exists()){
-				count++;
-		
+				
+				increment();
 				if (web[web.length - 1].isEmpty()) {
-					f = new File("index" + count + ".html" + fileExtension);
+					f = new File("index" + Wget.i  + ".html" + fileExtension);
 				} else {
-					f = new File(nameExtension[0] + count + "." + nameExtension[1] + fileExtension);
+					f = new File(nameExtension[0] + Wget.i  + "." + nameExtension[1] + fileExtension);
 				}
 				
 			}
@@ -113,6 +116,8 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 
 			closeQuietly(os);
 			is.close();
+			
+			Wget.i++;
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
