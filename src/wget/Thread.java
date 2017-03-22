@@ -81,7 +81,6 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 				} else {
 					f = new File(nameExtension[0] + Wget.i  + "." + nameExtension[1] + fileExtension);
 				}
-				
 			}
 			
 
@@ -116,8 +115,8 @@ public class Thread extends java.lang.Thread implements ThreadInterface {
 
 			closeQuietly(os);
 			is.close();
-			
-			Wget.i++;
+		
+			increment();
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
